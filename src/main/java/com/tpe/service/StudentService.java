@@ -6,6 +6,8 @@ import com.tpe.exception.ConflictException;
 import com.tpe.exception.ResourceNotFoundException;
 import com.tpe.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -76,5 +78,22 @@ public class StudentService {
 
         //by saving existingStudent we are persisting info to DB
         studentRepository.save(existingStudent);
+    }
+
+    public Page<Student> getAllStudentWithPage(Pageable pageable) {
+        return studentRepository.findAll(pageable);
+    }
+
+    public List<Student> findStudentByLastName(String lastName) {
+        return studentRepository.findByLastName(lastName);
+    }
+
+    public List<Student> findStudentByGrade(Integer grade) {
+        return studentRepository.findStudentByGradeWithSQL(grade);
+    }
+
+    public StudentDTO findStudentDTOById(Long id) {
+        return studentRepository.findStudentDTOById(id).orElseThrow(
+                ()->new ResourceNotFoundException("Student with id "+id+" is not found"));
     }
 }

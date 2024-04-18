@@ -5,6 +5,10 @@ import com.tpe.dto.StudentDTO;
 import com.tpe.service.StudentService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -92,6 +96,44 @@ public class StudentController {
     //if in our DB there are 1000 s of students and if we try to fetch them at the same time
     //it will take too much time may create issues
 
-    //TODO: 21:52
+    //get all students by page
+
+    @GetMapping("/page") //http://localhost:8080/students/page?page=2&size=10&sort=id&direction=ASC + GET
+    public ResponseEntity<Page<Student>>getAllStudentWithPage(
+        @RequestParam("page") int page, //page number starting from 0
+        @RequestParam("size") int size, //how many students we want per page
+        @RequestParam("sort") String prop, //sorting field(optional)
+        @RequestParam("direction") Sort.Direction direction //sorting type(ascending) (optional)
+    ){
+        //create pageable obj to be sent to DB
+        Pageable pageable = PageRequest.of(page,size,Sort.by(direction, prop));
+        Page<Student>studentsByPage = studentService.getAllStudentWithPage(pageable);
+        return ResponseEntity.ok(studentsByPage);
+    }
+
+    //method to get students by lastName
+    @GetMapping("/queryLastName") //http://localhost:8080/students/queryLastName?lastName=Bey 
+    public ResponseEntity<List<Student>>getStudentsByLastName(@RequestParam String lastName){
+        List<Student> students = studentService.findStudentByLastName(lastName);
+        return ResponseEntity.ok(students);
+        
+    }
+
+    //method to get students by grade (JPQL) Java Persistence Query Language
+    @GetMapping("/grade/{grade}") //http://localhost:8080/students/grade/90
+    public ResponseEntity<List<Student>>getStudentByGrade(@PathVariable("grade") Integer grade){
+        List<Student> students = studentService.findStudentByGrade(grade);
+        return ResponseEntity.ok(students);
+    }
+
+    //Can we get data as DTO from DB?
+    //using JPQL we can map entity class to DTO using the constructor we have set in DTO
+    @GetMapping("/query/dto") //http://localhost:8080/students/query/dto?id=2
+    public ResponseEntity<StudentDTO> getStudentDTO(@RequestParam("id") Long id){
+        StudentDTO studentDTO = studentService.findStudentDTOById(id);
+        return ResponseEntity.ok(studentDTO);
+    }
+
+
 
 }
