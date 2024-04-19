@@ -7,8 +7,9 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
-import java.nio.file.AccessMode;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "tbl_student")
@@ -45,6 +46,9 @@ public class Student {
     @Setter(AccessLevel.NONE) //this field cannot be set
     private LocalDateTime createdDate = LocalDateTime.now();
 
+    @OneToMany(mappedBy = "student") // when we mappedBy Student object hibernate will not create student_book table
+                        //"student" should be match with name of the student object in the Book class
+    private List<Book> books = new ArrayList<>();
 
 
 }

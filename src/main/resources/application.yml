@@ -29,30 +29,30 @@ spring:
     properties:
       '[hibernate.format_sql]': true
 
-#logging:
-#  file:
-#    name: logs/studentapp.log
-#  pattern:
-#    file: "%n %-5level [%thread] %logger:%msg%n"
-#  level:
-#    '[org.springframework.web': WARN
-#    '[org.hibernate]': INFO
-#    '[com.tpe]': DEBUG
-#
-#management:
-#  endpoints:
-#    web:
-#      exposure:
-#        include: ['health', 'loggers', 'env', 'beans']
-#
-#  info:
-#    env:
-#      enabled: true
-#
-#  endpoint:
-#    health:
-#      show-details: always
-#
-#    shutdown:
-#      enabled: true
-#
+logging: #loggers
+  file:
+    name: logs/studentapp.log
+  pattern:
+    file: "%d %-5level [%thread] %logger:%msg%n" #it shows form of the log messages
+  level:
+    '[org.springframework.web': WARN
+    '[org.hibernate]': INFO
+    '[com.tpe]': INFO
+
+management: #actuator
+  endpoints:
+    web:
+      exposure:
+        include: ['health', 'loggers', 'env', 'beans'] #there are also some other endpoints like info, threaddump, trace
+
+  info:
+    env:
+      enabled: true
+
+  endpoint:
+    health:
+      show-details: always
+
+    shutdown:
+      enabled: true
+
