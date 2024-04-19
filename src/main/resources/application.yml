@@ -16,10 +16,10 @@ spring:
     password: db_password
     driver-class-name: org.postgresql.Driver
 
-#  security:
-#    user:
-#      name: name
-#      password: password
+  security:
+    user:
+      name: name
+      password: password
 
   jpa:
     hibernate:
