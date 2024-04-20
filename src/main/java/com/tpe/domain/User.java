@@ -5,6 +5,10 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 @Getter
 @Setter
 @Entity
@@ -20,7 +24,13 @@ public class User {
     private String lastName;
     @Column(length = 25, nullable = false,unique = true)
     private String userName;
-    @Getter(AccessLevel.NONE)
     @Column(length = 255, nullable = false) //2 --> base64
     private String password;
+
+    @ManyToMany(fetch = FetchType.EAGER) //by default fetch type is lazy. If we want to see user's role
+    //directly we need to set fetch ro EAGER
+    @JoinTable(name = "tbl_user_role",
+            joinColumns = @JoinColumn(name=("user_id")),
+            inverseJoinColumns = @JoinColumn(name="role_id"))
+    private Set<Role> roles = new HashSet<>(); //To set unique roles like Student, Admin, Teacher
 }
