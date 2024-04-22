@@ -15,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,7 +25,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Controller
+@RestController
 //@RestController//used to crete restful API
 @RequestMapping("/students") //http://localhost:8080/students
 public class StudentController {
@@ -37,6 +38,7 @@ public class StudentController {
 
     //method to bring all students
     @GetMapping //http://localhost:8080/students + GET
+    @PreAuthorize("hasRole('ADMIN')") //hasRole will complete "ROLE_"
     public ResponseEntity<List<Student>> getAll(){ //HTTP status code + Students list
         List <Student> students = studentService.getAllStudents();
         return ResponseEntity.ok(students); //OK is for 200 status code

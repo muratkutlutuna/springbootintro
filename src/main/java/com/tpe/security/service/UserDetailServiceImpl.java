@@ -19,7 +19,7 @@ import java.util.Set;
 public class UserDetailServiceImpl implements UserDetailsService {
 
     /*
-        In this class we are going to convert
+        In this class, we are going to convert.
             1. User entity to UserDetail
             2. Role entity to Granted Authority
      */

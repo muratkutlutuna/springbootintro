@@ -13,4 +13,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByUserName(String userName)throws ResourceNotFoundException;
     //we will use UserRepository from UserDetailsService(Security) class, so we are handling exception here
 
+    boolean existsByUserName(String userName);
+
 }

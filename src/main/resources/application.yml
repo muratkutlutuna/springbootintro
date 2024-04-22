@@ -10,6 +10,9 @@ server:
     #context-path: /api/v0
 
 spring:
+  application:
+    name: springbootintro
+
   datasource:
     url: jdbc:postgresql://localhost:5432/sbootintro_db
     username: db_user

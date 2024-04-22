@@ -7,6 +7,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -16,7 +17,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
-import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration// to make this configuration class
 @EnableWebSecurity//enabling security
@@ -28,20 +28,18 @@ public class WebSecurityConfig {
         3. PassEncode
      */
     @Autowired
-    private UserDetailsService userDetailService;
+    private UserDetailsService userDetailsService;
 
     @Bean
     public SecurityFilterChain configure(HttpSecurity http) throws Exception {
         return http
                 .csrf(AbstractHttpConfigurer::disable) //Disable Cross Site Request Forgery
                 .authorizeHttpRequests(auth->{ //check requests if they are authorized
-                    auth.requestMatchers("/","/index.html","/js/*","/css/*").permitAll();//give permission to these paths --> no authentication/authorization
-                    auth.requestMatchers("/student")//except other requests
-                            .hasRole("STUDENT");//authenticate
-                    auth.requestMatchers("/admin")
-                            .hasRole("ADMIN");
-                    auth.requestMatchers("/teacher")
-                            .hasRole("TEACHER");
+                    auth.requestMatchers("/","/index.html","/js/*","/css/*","/register")
+                            .permitAll()//give permission to these paths --> no authentication/authorization
+                        .requestMatchers("/students/**").hasRole("ADMIN")
+                        .anyRequest()//authenticate
+                        .authenticated();
                 })
                 .httpBasic(Customizer.withDefaults())//use Basic Authentication for this
                 .build();
@@ -58,13 +56,13 @@ public class WebSecurityConfig {
     public DaoAuthenticationProvider authenticationProvider(){
         DaoAuthenticationProvider autoProvider = new DaoAuthenticationProvider();
         autoProvider.setPasswordEncoder(passwordEncoder());
-        autoProvider.setUserDetailsService(userDetailService);
+        autoProvider.setUserDetailsService(userDetailsService);
         return autoProvider;
     }
 
     @Bean
-    public void configure(AuthenticationManagerBuilder auth) throws Exception{
-        auth.authenticationProvider(authenticationProvider());
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
     }
 
 
