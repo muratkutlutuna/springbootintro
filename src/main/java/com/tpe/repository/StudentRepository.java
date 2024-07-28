@@ -5,6 +5,7 @@ import com.tpe.domain.Student;
 import com.tpe.dto.StudentDTO;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.query.Procedure;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
@@ -30,4 +31,7 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
     //so we are returning studentDTO obj to service
     @Query("SELECT new com.tpe.dto.StudentDTO(s) FROM Student s WHERE s.id=:id")
     Optional<StudentDTO> findStudentDTOById(@Param("id") Long id);
+
+    @Query(value="SELECT GET_COUNT();", nativeQuery = true)
+    String getStudentCount();
 }

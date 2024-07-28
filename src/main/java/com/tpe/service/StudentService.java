@@ -96,4 +96,8 @@ public class StudentService {
         return studentRepository.findStudentDTOById(id).orElseThrow(
                 ()->new ResourceNotFoundException("Student with id "+id+" is not found"));
     }
+
+    public String getStudentCount() {
+        return studentRepository.getStudentCount();
+    }
 }

@@ -153,5 +153,11 @@ public class StudentController {
         return "Welcome to Student Controller";
     }
 
+    //method to give us number of students
+    @GetMapping("/getStudentNumber") //http://localhost:8080/students/getStudentNumber
+    public String getStudentNumber(){
+        String numOfStudent = studentService.getStudentCount();
+        return "Total number of registered students: " + numOfStudent;
+    }
 
 }
