@@ -47,5 +47,23 @@ public class Test06_ParameterizedTest {
     void TestUpperCase2(String str1, String str2){
         assertEquals(str1, str2.toUpperCase());
     }
-    //TODO: 2:38:00 Unit Test Video 1
+
+    /*
+        if we want to test:
+            "java".contains a-->assertTrue
+            "Junit".contains u-->assertTrue
+            "Test".contains a-->assertFalse
+
+        How would you test these by using CsvSource?
+     */
+
+    @ParameterizedTest
+    @CsvSource({
+            "true, Java, a",
+            "true, Junit, u",
+            "false, Test, a"
+    })
+    void testContains(boolean b1, String str1, String str2){
+        assertEquals(b1, str1.contains(str2));
+    }
 }
