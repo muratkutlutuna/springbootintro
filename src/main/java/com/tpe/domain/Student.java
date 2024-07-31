@@ -22,7 +22,7 @@ import java.util.List;
 public class Student {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Setter(AccessLevel.NONE) //this field cannot be set
+//    @Setter(AccessLevel.NONE) //this field cannot be set
     private Long id;
 
     @NotNull(message = "First name cannot be null.")
